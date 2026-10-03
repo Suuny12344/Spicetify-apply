@@ -1,21 +1,20 @@
 import os
-import sys
+import shutil
 import subprocess
 import time
 
-# ANSI-Farben auf Windows aktivieren (os.system("") schaltet den VT-Modus ein)
 if os.name == "nt":
-    os.system("")
+    os.system("")  # aktiviert ANSI-Farben in der Windows-Konsole
 
-# Keine Farben, wenn die Ausgabe nicht in ein Terminal geht (z. B. umgeleitet in eine Datei)
-if sys.stdout.isatty():
-    GREEN = "\033[92m"
-    RED = "\033[91m"
-    RESET = "\033[0m"
-else:
-    GREEN = RED = RESET = ""
+GREEN = "\033[92m"
+RED = "\033[91m"
+RESET = "\033[0m"
 
 def main():
+    if shutil.which("spicetify") is None:
+        print(f"{RED}spicetify was not found in PATH, is it installed?{RESET}")
+        return
+
     print("Applying Spicetify...")
 
     process = subprocess.Popen("spicetify backup apply", shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
